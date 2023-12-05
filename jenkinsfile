@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+
+  tools {
+  nodejs 'nodejs21'
+}
+
+
+    stages {
+        stage('checkout') {
+            steps {
+            git branch: 'main', poll: false, url: 'https://github.com/rainpraks/KoodJohviCICD'
+        }
+        }
+        stage('Build') {
+            steps {
+           sh '''npm instal'''
+           sh '''npm run build'''
+            }
+        }
+        stage('copy') {
+            steps {
+            sh 'mkdir -p /kj_deployments/rain'
+            sh 'cp dist/kood-johvi-cicd/browser/* /kj_deployments/rain/'
+            sh ' ls /kj_deployments/rain/'
+            }
+        }
+    
+        stage('discord') {
+            steps {
+                discordSend description: '', footer: '', image: '', link: '', result: '', scmWebUrl: '', thumbnail: '', title: '', webhookURL: 'https://discord.com/api/webhooks/1181572706446082100/NH6ErV3VR9mAo1E9fKqtRulJJBCHeQ0h4k3SdciGi_xE1XQIMv7dCz9WivgnD3JlcATb'
+            }
+        }
+    }
+    
+    
+}

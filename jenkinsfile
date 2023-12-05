@@ -4,7 +4,9 @@ pipeline {
   tools {
   nodejs 'nodejs21'
 }
-
+environment {
+        DEPLOY_DIR = "/kj_deployments/rain_${env.BRANCH_NAME}/"
+    }
 
     stages {
         stage('checkout') {
@@ -20,9 +22,8 @@ pipeline {
         }
         stage('copy') {
             steps {
-            sh 'mkdir -p /kj_deployments/rain'
-            sh 'cp dist/kood-johvi-cicd/browser/* /kj_deployments/rain/'
-            sh ' ls /kj_deployments/rain/'
+            sh "mkdir -p ${DEPLOY_DIR}/"
+            sh "cp -r dist/kood-johvi-cicd/browser/* ${DEPLOY_DIR}/"
             }
         }
     
